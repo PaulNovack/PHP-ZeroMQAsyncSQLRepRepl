@@ -49,5 +49,5 @@ $endTime = microtime(true);
 
 echo "Ran: " . sizeof($queries) . ' SQL queries' . PHP_EOL;
 // Calculate and display elapsed time
-$elapsedTime = ($endTime - $startTime) * 1000; // Convert seconds to microseconds
+$elapsedTime = ($endTime - $startTime) * 1000; // Convert seconds to milliseconds
 echo "Script executed in $elapsedTime milliseconds.\n";
