@@ -23,6 +23,8 @@ docker compose up
 ### Run the client that is in the php-zmq-parallel-server
 
 docker exec -it php-zmq-parallel-server bash
+
 cd app
+
 php client.php
 
