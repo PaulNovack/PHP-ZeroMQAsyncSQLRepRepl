@@ -1,6 +1,6 @@
 # PHP-ZeroMQAsyncSQLReqRepl
 
-This implements a ZeroMQ server that can recieve SQL queries from ZeroMQ messages and process them in threads using PHP Parallel extension in threads.
+This implements a ZeroMQ server that can recieve SQL queries from ZeroMQ messages and process them in threads using PHP Parallel extension.
 
 PHP Clients send a Unique Identifier with a query that the client can later recieve the results.   This allows clients to send sql calls to be executed in a non blocking manner and retrieve the results later on after they have executed and there are results.
 
