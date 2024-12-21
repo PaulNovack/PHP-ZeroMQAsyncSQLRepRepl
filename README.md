@@ -2,7 +2,7 @@
 
 This implements a ZeroMQ server that can recieve SQL queries from ZeroMQ messages and process them in threads using PHP Parallel extension in threads.
 
-Clients send a Unique Identifier with a query that the client can later recieve the results.   This allows clients to send sql calls to be executed in a non blocking manner.
+PHP Clients send a Unique Identifier with a query that the client can later recieve the results.   This allows clients to send sql calls to be executed in a non blocking manner and retrieve the results later on after they have executed and there are results.
 
 In the example client.php script. There are 1000 sql selects with a random 1 to 5 second delay. They are sent to the PHP ZeroMQ server and then the results are retrieved for each unique query identifier and then the client exits.
 
