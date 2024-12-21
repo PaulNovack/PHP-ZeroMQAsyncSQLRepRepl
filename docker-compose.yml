@@ -1,0 +1,53 @@
+version: "3.9"
+
+services:
+  php-apache:
+    build:
+      context: .
+      dockerfile: Dockerfile.php-apache
+    container_name: php-apache-server
+    networks:
+      - app-network
+    volumes:
+      - ./app:/var/www/html
+    ports:
+      - "8080:80"
+      - "9003:9003" # Xdebug
+    depends_on:
+      - mysql
+      - zmq-parallel
+
+  zmq-parallel:
+    build:
+      context: .
+      dockerfile: Dockerfile.zmq-parallel
+    container_name: php-zmq-parallel-server
+    networks:
+      - app-network
+    volumes:
+      - ./zmq-server:/app
+    depends_on:
+      - mysql
+    command: php /app/server.php # Adjust this to match your ZeroMQ server entry point
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-server
+    networks:
+      - app-network
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: defaultdb
+    volumes:
+      - mysql-data:/var/lib/mysql
+    ports:
+      - "3307:3306"
+      - "33061:33060"
+
+
+
+networks:
+  app-network:
+
+volumes:
+  mysql-data:

@@ -1,0 +1,56 @@
+# Start from PHP 8.2 with ZTS (Zend Thread Safety) enabled
+FROM php:8.2-zts
+
+# Install prerequisites for building PHP extensions and MariaDB client tools
+RUN apt-get update && \
+    apt-get install -y \
+    wget \
+    gnupg \
+    git \
+    build-essential \
+    libpcre3-dev \
+    libzmq3-dev \
+    mariadb-client \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Xdebug
+RUN pecl install xdebug && docker-php-ext-enable xdebug
+
+# Enable mysqli extension
+RUN docker-php-ext-install mysqli
+RUN docker-php-ext-install pdo_mysql
+
+# Clone the parallel extension source code
+RUN git clone https://github.com/krakjoe/parallel.git /usr/src/php/ext/parallel
+
+# Compile and install the parallel extension
+RUN cd /usr/src/php/ext/parallel && \
+    phpize && \
+    ./configure && \
+    make && \
+    make install
+
+# Clone the latest php-zmq source code from GitHub
+RUN git clone https://github.com/zeromq/php-zmq.git /usr/src/php/ext/zmq && \
+    cd /usr/src/php/ext/zmq && \
+    phpize && \
+    ./configure && \
+    make && \
+    make install && \
+    docker-php-ext-enable zmq
+
+
+# Enable the zmq extension in PHP
+# RUN echo "extension=zmq.so" >> /usr/local/etc/php/php.ini
+
+# Enable the parallel extension and configure Xdebug in PHP configuration
+RUN echo "extension=parallel.so" >> /usr/local/etc/php/php.ini && \
+    echo "xdebug.mode=debug" >> /usr/local/etc/php/php.ini && \
+    echo "xdebug.start_with_request=yes" >> /usr/local/etc/php/php.ini && \
+    echo "xdebug.client_host=host.docker.internal" >> /usr/local/etc/php/php.ini && \
+    echo "xdebug.client_port=9003" >> /usr/local/etc/php/php.ini && \
+    echo "xdebug.log=/tmp/xdebug.log" >> /usr/local/etc/php/php.ini
+
+# Expose Xdebug port
+EXPOSE 9003
+EXPOSE 5555
