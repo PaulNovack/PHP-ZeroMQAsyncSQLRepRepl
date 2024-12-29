@@ -1,5 +1,7 @@
 # PHP-ZeroMQAsyncSQLReqRepl
 
+## Deprecated had reliablility issues with implementint with PHP-Parallels
+
 For a more durable server use the c++ version here: https://github.com/PaulNovack/CppZeroMQAsynchSQLServer
 
 PHP Server running parallels and zeroMQ can segfault in certain conditions.   The c++ version is much more stable.
